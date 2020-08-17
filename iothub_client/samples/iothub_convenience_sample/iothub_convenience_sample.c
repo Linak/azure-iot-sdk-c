@@ -69,6 +69,47 @@ static int proxy_port = 0;               // Proxy port
 static const char* proxy_username = NULL; // Proxy user name
 static const char* proxy_password = NULL; // Proxy password
 
+// TODO: add proper description and documentation.
+static void send_security_message_confirm_callback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
+{
+    (void)userContextCallback;
+    (void)printf("Confirmation callback received for security message (result=%s)\r\n", MU_ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));
+}
+
+// TODO: add proper description and documentation.
+static void send_device_security_info(IOTHUB_DEVICE_CLIENT_HANDLE device_handle)
+{
+    char security_info[256];
+    
+    if (sprintf(security_info, "<todo: collect and format security info as needed>") <= 0)
+    {
+        printf("Failed gathering security info\r\n");
+    }
+    else
+    {
+        IOTHUB_MESSAGE_HANDLE security_message_handle = IoTHubMessage_CreateFromString(security_info);
+
+        if (security_message_handle == NULL)
+        {
+            printf("Failed creating security message\r\n");
+        }
+        else
+        {
+            if (IoTHubMessage_SetAsSecurityMessage(security_message_handle) != IOTHUB_MESSAGE_OK)
+            {
+                printf("Failed setting security message flag\r\n");
+            }
+            else if (IoTHubDeviceClient_SendEventAsync(device_handle, security_message_handle, send_security_message_confirm_callback, NULL) != IOTHUB_CLIENT_OK)
+            {
+                printf("Failed sending security information message\r\n");
+            }
+
+            // The message is copied to the sdk so the we can destroy it
+            IoTHubMessage_Destroy(security_message_handle);
+        }
+    }
+}
+
 static IOTHUBMESSAGE_DISPOSITION_RESULT receive_msg_callback(IOTHUB_MESSAGE_HANDLE message, void* user_context)
 {
     (void)user_context;
@@ -251,7 +292,12 @@ int main(void)
             {
                 (void)printf("failure to set proxy\n");
             }
-        }		
+        }
+
+        // Send security information (NEW!).
+        // By sending security information about your system your solution can benefit from... <add details>
+        // Please see more at <add link>
+        send_device_security_info(device_handle);
 
         // Setting message callback to get C2D messages
         (void)IoTHubDeviceClient_SetMessageCallback(device_handle, receive_msg_callback, NULL);
