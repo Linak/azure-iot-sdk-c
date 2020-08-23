@@ -180,6 +180,12 @@ extern "C"
     typedef void(*IOTHUB_CLIENT_FILE_UPLOAD_GET_DATA_CALLBACK)(IOTHUB_CLIENT_FILE_UPLOAD_RESULT result, unsigned char const ** data, size_t* size, void* context);
     typedef IOTHUB_CLIENT_FILE_UPLOAD_GET_DATA_RESULT(*IOTHUB_CLIENT_FILE_UPLOAD_GET_DATA_CALLBACK_EX)(IOTHUB_CLIENT_FILE_UPLOAD_RESULT result, unsigned char const ** data, size_t* size, void* context);
 
+    /**
+    *  @brief           Callback invoked by IoTHubClient to fetch updated SAS token
+    *  @param sasToken  Pointer to string containing SAS token
+    */
+    typedef void (*IOTHUB_CLIENT_REQUEST_SAS_TOKEN_CALLBACK)(char** sasToken);
+
     /** @brief    This struct captures IoTHub client configuration. */
     typedef struct IOTHUB_CLIENT_CONFIG_TAG
     {
@@ -207,6 +213,9 @@ extern "C"
         const char* iotHubSuffix;
 
         const char* protocolGatewayHostName;
+
+        /** @brief    Callback to request new SAS Token, when SAS Token expire. */
+        IOTHUB_CLIENT_REQUEST_SAS_TOKEN_CALLBACK requestSasTokenCallback;
     } IOTHUB_CLIENT_CONFIG;
 
     /** @brief    This struct captures IoTHub client device configuration. */

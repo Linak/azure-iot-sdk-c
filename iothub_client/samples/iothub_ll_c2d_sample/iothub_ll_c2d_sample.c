@@ -10,6 +10,7 @@
 
 #include "iothub.h"
 #include "iothub_device_client_ll.h"
+#include "iothub_client_ll.h"
 #include "iothub_client_options.h"
 #include "iothub_message.h"
 #include "azure_c_shared_utility/threadapi.h"
@@ -17,8 +18,8 @@
 
 // The protocol you wish to use should be uncommented
 //
-#define SAMPLE_MQTT
-//#define SAMPLE_MQTT_OVER_WEBSOCKETS
+//#define SAMPLE_MQTT
+#define SAMPLE_MQTT_OVER_WEBSOCKETS
 //#define SAMPLE_AMQP
 //#define SAMPLE_AMQP_OVER_WEBSOCKETS
 //#define SAMPLE_HTTP
@@ -44,7 +45,7 @@
 #endif // SET_TRUSTED_CERT_IN_SAMPLES
 
 /* Paste in the your iothub connection string  */
-static const char* connectionString = "[device connection string]";
+static const char* connectionString = "HostName=DEV-LIP-IoTHub.azure-devices.net;DeviceId=MartinTest1;SharedAccessKey=dZsxit0fZQRwT0QROuV6EFVfngk6A9PlJtOfksful1k=";
 
 #define MESSAGE_COUNT        3
 static bool g_continueRunning = true;
@@ -136,7 +137,8 @@ int main(void)
     (void)printf("Creating IoTHub Device handle\r\n");
 
     // Create the iothub handle here
-    device_ll_handle = IoTHubDeviceClient_LL_CreateFromConnectionString(connectionString, protocol);
+    //device_ll_handle = IoTHubDeviceClient_LL_CreateFromConnectionString("HostName=DEV-LIP-IoTHub.azure-devices.net;DeviceId=MartinTest1;SharedAccessKey=dZsxit0fZQRwT0QROuV6EFVfngk6A9PlJtOfksful1k=", protocol);
+    device_ll_handle = IoTHubClient_LL_CreateFromConnectionString("HostName=DEV-LIP-IoTHub.azure-devices.net;DeviceId=MartinTest1;SharedAccessKey=dZsxit0fZQRwT0QROuV6EFVfngk6A9PlJtOfksful1k=", protocol);
     if (device_ll_handle == NULL)
     {
         (void)printf("Failure createing Iothub device.  Hint: Check you connection string.\r\n");
@@ -172,6 +174,7 @@ int main(void)
         IoTHubDeviceClient_LL_SetOption(device_ll_handle, OPTION_HTTP_TIMEOUT, &timeout);
 #endif // SAMPLE_HTTP
 
+        //if (IoTHubDeviceClient_LL_SetMessageCallback(device_ll_handle, receive_msg_callback, &messages_count) != IOTHUB_CLIENT_OK)
         if (IoTHubDeviceClient_LL_SetMessageCallback(device_ll_handle, receive_msg_callback, &messages_count) != IOTHUB_CLIENT_OK)
         {
             (void)printf("ERROR: IoTHubClient_LL_SetMessageCallback..........FAILED!\r\n");
@@ -187,14 +190,16 @@ int main(void)
                     g_continueRunning = false;
                 }
 
-                IoTHubDeviceClient_LL_DoWork(device_ll_handle);
+                //IoTHubDeviceClient_LL_DoWork(device_ll_handle);
+                IoTHubClient_LL_DoWork(device_ll_handle);
                 ThreadAPI_Sleep(10);
 
             } while (g_continueRunning);
         }
 
         // Clean up the iothub sdk handle
-        IoTHubDeviceClient_LL_Destroy(device_ll_handle);
+        //IoTHubDeviceClient_LL_Destroy(device_ll_handle);
+        IoTHubClient_LL_Destroy(device_ll_handle);
     }
     // Free all the sdk subsystem
     IoTHub_Deinit();
