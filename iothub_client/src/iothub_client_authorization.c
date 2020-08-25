@@ -382,6 +382,7 @@ static void check_for_updated_sas_token(IOTHUB_AUTHORIZATION_HANDLE handle)
       else if (strcmp(handle->device_sas_token, updated_sas_token) != 0)
       {
         free(handle->device_sas_token);
+        handle->device_sas_token = NULL;
         updateToken = true;
       }
 
