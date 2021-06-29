@@ -357,7 +357,13 @@ typedef struct IOTHUB_CLIENT_LL_UPLOADTOBLOB_CONTEXT_STRUCT* IOTHUB_CLIENT_LL_UP
     */
     typedef IOTHUB_CLIENT_FILE_UPLOAD_GET_DATA_RESULT(*IOTHUB_CLIENT_FILE_UPLOAD_GET_DATA_CALLBACK_EX)(IOTHUB_CLIENT_FILE_UPLOAD_RESULT result, unsigned char const ** data, size_t* size, void* context);
 
-    /** @brief    This struct specifies IoT Hub client configuration. */
+    /**
+    *  @brief           Callback invoked by IoTHubClient to fetch updated SAS token
+    *  @param sasToken  Pointer to string containing SAS token
+    */
+    typedef void (*IOTHUB_CLIENT_REQUEST_SAS_TOKEN_CALLBACK)(char** sasToken);
+
+    /** @brief    This struct captures IoTHub client configuration. */
     typedef struct IOTHUB_CLIENT_CONFIG_TAG
     {
         /** @brief A function pointer that is passed into IoTHubDeviceClient_CreateWithTransport() or IoTHubDeviceClient_LL_Create().
@@ -385,6 +391,9 @@ typedef struct IOTHUB_CLIENT_LL_UPLOADTOBLOB_CONTEXT_STRUCT* IOTHUB_CLIENT_LL_UP
 
         /** @brief    Optional gateway host to connect to (instead of directly to IoT Hub).  Can be NULL. */
         const char* protocolGatewayHostName;
+
+        /** @brief    Callback to request new SAS Token, when SAS Token expire. */
+        IOTHUB_CLIENT_REQUEST_SAS_TOKEN_CALLBACK requestSasTokenCallback;
     } IOTHUB_CLIENT_CONFIG;
 
     /** @brief    This struct specifies  IoT Hub client device configuration. */

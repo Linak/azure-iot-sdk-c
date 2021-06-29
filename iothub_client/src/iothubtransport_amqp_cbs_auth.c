@@ -566,7 +566,9 @@ void authentication_do_work(AUTHENTICATION_HANDLE authentication_handle)
         else if (instance->state == AUTHENTICATION_STATE_STARTED)
         {
             IOTHUB_CREDENTIAL_TYPE cred_type = IoTHubClient_Auth_Get_Credential_Type(instance->authorization_module);
-            if (cred_type == IOTHUB_CREDENTIAL_TYPE_DEVICE_KEY || cred_type == IOTHUB_CREDENTIAL_TYPE_DEVICE_AUTH)
+            if ( (cred_type == IOTHUB_CREDENTIAL_TYPE_DEVICE_KEY) ||
+                 (cred_type == IOTHUB_CREDENTIAL_TYPE_DEVICE_AUTH) ||
+                 ((cred_type == IOTHUB_CREDENTIAL_TYPE_SAS_TOKEN) && IoTHubClient_Auth_Is_SasToken_Update_Supported(instance->authorization_module)) )
             {
                 bool is_timed_out;
                 if (verify_sas_token_refresh_timeout(instance, &is_timed_out) == RESULT_OK && is_timed_out)

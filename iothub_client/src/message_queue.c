@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include "azure_c_shared_utility/optimize_size.h"
 #include "azure_c_shared_utility/crt_abstractions.h"
 #include "azure_c_shared_utility/gballoc.h"
@@ -134,7 +135,7 @@ static void on_process_message_completed_callback(MESSAGE_QUEUE_HANDLE message_q
 {
     if (message_queue == NULL)
     {
-        LogError("on_process_message_completed_callback invoked with NULL arguments (message_id=%u, message_queue=%p)", message_id, message_queue);
+        LogError("on_process_message_completed_callback invoked with NULL arguments (message_id=%" PRIu32 ", message_queue=%p)", message_id, message_queue);
     }
     else
     {
@@ -142,7 +143,7 @@ static void on_process_message_completed_callback(MESSAGE_QUEUE_HANDLE message_q
 
         if ((list_item = singlylinkedlist_find(message_queue->in_progress, find_item_by_message_id, &message_id)) == NULL)
         {
-            LogError("on_process_message_completed_callback invoked for a message not in the in-progress list (%u)", message_id);
+            LogError("on_process_message_completed_callback invoked for a message not in the in-progress list (%" PRIu32 ")", message_id);
         }
         else
         {
