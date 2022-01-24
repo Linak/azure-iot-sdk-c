@@ -190,7 +190,7 @@ static void on_cbs_put_token_complete_callback(void* context, CBS_OPERATION_RESU
         }
         else
         {
-            LogError("CBS reported status code %u, - no further info due to null-ptr");
+            LogError("CBS reported status code %u, - no further info due to null-ptr", status_code);
         }
 
         // Codes_SRS_IOTHUBTRANSPORT_AMQP_AUTH_09_092: [If `result` is not CBS_OPERATION_RESULT_OK `instance->state` shall be set to AUTHENTICATION_STATE_ERROR and `instance->on_state_changed_callback` invoked]
