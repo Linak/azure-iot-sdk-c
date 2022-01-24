@@ -183,7 +183,15 @@ static void on_cbs_put_token_complete_callback(void* context, CBS_OPERATION_RESU
     }
     else
     {
-        LogError("CBS reported status code %u, error: '%s' for put-token operation for device '%s'", status_code, status_description, instance->device_id);
+        // Protected log info for null-ptr issue
+        if (status_description && instance->device_id)
+        {
+            LogError("CBS reported status code %u, error: '%s' for put-token operation for device '%s'", status_code, status_description, instance->device_id);
+        }
+        else
+        {
+            LogError("CBS reported status code %u, - no further info due to null-ptr");
+        }
 
         // Codes_SRS_IOTHUBTRANSPORT_AMQP_AUTH_09_092: [If `result` is not CBS_OPERATION_RESULT_OK `instance->state` shall be set to AUTHENTICATION_STATE_ERROR and `instance->on_state_changed_callback` invoked]
         update_state(instance, AUTHENTICATION_STATE_ERROR);
