@@ -487,7 +487,7 @@ static int remove_twin_operation_context_from_queue(TWIN_OPERATION_CONTEXT* twin
 static int parse_incoming_twin_message(MESSAGE_HANDLE message,
     char** correlation_id,
     bool* has_version, int64_t* version,
-    bool* has_status_code, int* status_code,
+    bool* has_status_code, int32_t* status_code,
     bool* has_twin_report, BINARY_DATA* twin_report)
 {
     int result;
@@ -1355,7 +1355,7 @@ static AMQP_MESSENGER_DISPOSITION_RESULT on_amqp_message_received_callback(MESSA
         char* correlation_id;
 
         bool has_status_code;
-        int status_code;
+        int32_t status_code;
 
         bool has_version;
         int64_t version;

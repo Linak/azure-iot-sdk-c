@@ -56,7 +56,7 @@ extern "C"
     MU_DEFINE_ENUM_WITHOUT_INVALID(TWIN_UPDATE_TYPE, TWIN_UPDATE_TYPE_VALUES);
 
     typedef void(*TWIN_MESSENGER_STATE_CHANGED_CALLBACK)(void* context, TWIN_MESSENGER_STATE previous_state, TWIN_MESSENGER_STATE new_state);
-    typedef void(*TWIN_MESSENGER_REPORT_STATE_COMPLETE_CALLBACK)(TWIN_REPORT_STATE_RESULT result, TWIN_REPORT_STATE_REASON reason, int status_code, const void* context);
+    typedef void(*TWIN_MESSENGER_REPORT_STATE_COMPLETE_CALLBACK)(TWIN_REPORT_STATE_RESULT result, TWIN_REPORT_STATE_REASON reason, int32_t status_code, const void* context);
     typedef void(*TWIN_STATE_UPDATE_CALLBACK)(TWIN_UPDATE_TYPE update_type, const char* payload, size_t size, const void* context);
 
     typedef struct TWIN_MESSENGER_CONFIG_TAG
